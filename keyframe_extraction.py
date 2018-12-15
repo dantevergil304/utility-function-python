@@ -20,7 +20,7 @@ def getDuration(cap):
     return cap.get(cv2.CAP_PROP_FRAME_COUNT) / cap.get(cv2.CAP_PROP_FPS)
 
 
-def KeyframeExtraction(path, sampling_rate):
+def KeyframeExtraction(path, sampling_rate=None):
     # path: path to video file
     # sampling_rate: the number of frames per second
     cap = cv2.VideoCapture(path)
@@ -45,7 +45,7 @@ def KeyframeExtraction(path, sampling_rate):
         ret, frame = cap.read()
 
         if ret is True:
-            if index % coef == 0:
+            if (index % coef == 0) or (sampling_rate is None):
                 cv2.imwrite(directory_path + filename.split('.')[0] + '-KF'
                             + str(label).zfill(5) + '.jpg', frame)
                 label += 1
