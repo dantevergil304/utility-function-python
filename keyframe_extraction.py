@@ -28,7 +28,8 @@ def KeyframeExtraction(path, sampling_rate=None):
     total_frame = getTotalFrame(path)
     duration = getDuration(cap)
     fps = total_frame / duration
-    coef = round(fps / sampling_rate)
+    if sampling_rate is not None:
+        coef = round(fps / sampling_rate)
 
     filename = path.split('/')[-1]
     directory_path = './keyframes/' + filename.split('.')[0] + '/'
@@ -45,7 +46,7 @@ def KeyframeExtraction(path, sampling_rate=None):
         ret, frame = cap.read()
 
         if ret is True:
-            if (index % coef == 0) or (sampling_rate is None):
+            if (sampling_rate is None) or (index % coef == 0):
                 cv2.imwrite(directory_path + filename.split('.')[0] + '-KF'
                             + str(label).zfill(5) + '.jpg', frame)
                 label += 1
@@ -58,4 +59,4 @@ def KeyframeExtraction(path, sampling_rate=None):
 
 
 if __name__ == '__main__':
-    KeyframeExtraction('./videos/29_11_2017 06_13_59 (UTC+07_00).mkv', 5)
+    KeyframeExtraction('./cut.mp4', None)
